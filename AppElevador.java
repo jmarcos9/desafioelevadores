@@ -1,24 +1,23 @@
 package segundoPeriodo.Elevadores;
-
-
-
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 public class AppElevador {
 
     static Scanner sc = new Scanner(System.in);
-    static Elevadores elevadores = new Elevadores(0,0);
+    static Elevadores elevadorA = new Elevadores(0, 1, false);
+    static Elevadores elevadorB = new Elevadores(0, 2, false);
     static byte opcao = 0;
     static int andarUsuario;
     static int andarDestino;
+
     static double esforcoB = 0;
     static double esforcoA = 0;
+
     public static void main(String[] args) throws InterruptedException {
 
         do {
-            System.out.println("Opção: \n*** 1 - Ligar/Desligar Elevador: A \n*** 2 - Ligar/Desligar Elevador: B" +
-                    "\n*** 3 - Solicitar Elevador");
+            System.out.println("\nOpção: \n*** 1 - Ligar/Desligar Elevador: A \n*** 2 - Ligar/Desligar Elevador: B" +
+                    "\n*** 3 - Solicitar Elevador \n*** 4 - Status Elevador  ");
             System.out.print("Entre com a opção: ");
             opcao = sc.nextByte();
 
@@ -28,21 +27,14 @@ public class AppElevador {
                     break;
                 case 2:
                     ligarDesligarElevadorB();
-
                     break;
                 case 3:
                     solicitarElevador();
                     break;
                 case 4:
-                    calcularEsforcoA();
+                    statusElevadores();
                     break;
-                case 5:
-
-                    break;
-                case 6:
-
-                    break;
-                case 7:
+                case 0:
                     System.out.println("Programa encerrado");
                 default:
                     System.out.println("Opção Inválida");
@@ -50,167 +42,112 @@ public class AppElevador {
         } while (opcao != 0);
     }
 
-    public static boolean ligarDesligarElevadorA() throws InterruptedException {
-
-        if (elevadores.isLigadoA() == false) {
+    public static boolean ligarDesligarElevadorA(){
+        if (elevadorA.isLigadoA() == false) {
             System.out.println("Elevador A: Ligado");
-            elevadores.ligarDesligarA();
-            elevadores.setPrioritario(true);
-            System.out.printf("Andar atual: %d - Terreo\n",elevadores.getAndarAtualA());
+            elevadorA.ligarDesligarA();
+            System.out.printf("Andar atual: %d - Terreo\n",elevadorA.getAndarAtual());
         } else {
-            elevadores.ligarDesligarA();
+            elevadorA.ligarDesligarA();
+            elevadorA.setAndarAtual(0);
+            System.out.printf("Andar atual A: %d - Terreo\n",elevadorA.getAndarAtual());
             System.out.println("Elevador A: Desligado");
         }return true;
     }
 
-    public static boolean ligarDesligarElevadorB() throws InterruptedException {
-        if (elevadores.isLigadoA() == false){
+    public static boolean ligarDesligarElevadorB(){
+        if (elevadorA.isLigadoA() == false){
             System.out.println("Elevador: (A) Deve ser ligado Primeiro");
             return true;
         }
 
-        if (elevadores.isLigadoB() == false) {
+        if (elevadorB.isLigadoB() == false) {
             System.out.println("Elevador B: Ligado");
-            elevadores.ligarDesligarB();
-            System.out.printf("Andar atual B: %d - Terreo\n",elevadores.getAndarAtualB());
+            elevadorB.ligarDesligarB();
+            System.out.printf("Andar atual B: %d - Terreo\n",elevadorB.getAndarAtual());
         } else {
-            elevadores.ligarDesligarB();
+            elevadorB.ligarDesligarB();
             System.out.println("Elevador B: Desligado");
         }return true;
-
-    }
-
-    public static void statusElevadores(){
-        if (elevadores.isLigadoA() && elevadores.isLigadoB()){
-            System.out.println("andar elevador A: " + elevadores.getAndarAtualA());
-            System.out.println("andar elevador B: " + elevadores.getAndarAtualB());
-        } else if (elevadores.isLigadoA()){
-            System.out.println("andar elevador A: " + elevadores.getAndarAtualA());
-        } else {
-            System.out.println("andar elevador B: " + elevadores.getAndarAtualB());
-        }
     }
 
     public static void solicitarElevador(){
-
-        statusElevadores();
-
-        if (elevadores.getAndarAtualA() > 5){
-            elevadores.ligarB();
+        elevadorA.getAndarAtual();
+        if (elevadorA.isLigadoA() == false){
+            elevadorA.ligarA();
+        } else if (elevadorA.isLigadoA() == true && elevadorB.isLigadoB() == false){
+            elevadorB.ligarB();
         }
-
-        System.out.println("|*****************|");
-        System.out.println("|**** 10 ** 9 ****|");
-        System.out.println("|****  8 ** 7 ****|");
-        System.out.println("|****  6 ** 5 ****|");
-        System.out.println("|****  4 ** 3 ****|");
-        System.out.println("|****  2 ** 1 ****|");
-        System.out.println("|**  0  Terreo  **|");
-        System.out.println("|*****************|");
-        System.out.print("Informe o andar que Você está: ");
-        andarUsuario = sc.nextInt();
-
-        boolean infvalida = false;
-
-        System.out.println("|*****************|");
-        System.out.println("|**** 10 ** 9 ****|");
-        System.out.println("|****  8 ** 7 ****|");
-        System.out.println("|****  6 ** 5 ****|");
-        System.out.println("|****  4 ** 3 ****|");
-        System.out.println("|****  2 ** 1 ****|");
-        System.out.println("|**  0  Terreo  **|");
-        System.out.println("|*****************|");
-        System.out.print("Informe o andar Destino: ");
-        andarDestino = sc.nextInt();
-
-        menorEsfoco();
-
-        //calcularEsforcoA();
-        //calcularEsforcoB();
-
+        menu();
     }
 
-    public static void calcularEsforcoA(){
-
-        if (elevadores.getAndarAtualA() <= andarUsuario && andarDestino > andarUsuario){
-            esforcoA = ((andarUsuario - elevadores.getAndarAtualA()) + (andarDestino - andarUsuario)) * 1.25;//ok
+    public static void menu(){
+        do {
+            statusElevadores();
             System.out.println();
-        } else if (elevadores.getAndarAtualA() <= andarUsuario && andarDestino < andarUsuario){
-            esforcoA = ((andarUsuario - elevadores.getAndarAtualA()) * 1.25) + (andarUsuario - andarDestino);//ok
-        } else if (elevadores.getAndarAtualA() > andarUsuario && andarDestino > andarUsuario){
-            esforcoA = (elevadores.getAndarAtualA() - andarUsuario) + ((andarDestino - andarUsuario) * 1.25);//ok
-        } else if (elevadores.getAndarAtualA() > andarUsuario && andarDestino < andarUsuario) {
-            esforcoA = ((elevadores.getAndarAtualA() - andarUsuario)) + ((andarUsuario - andarDestino));//ok
-        } else if (andarUsuario == andarDestino){
-            System.out.println("Destino não pode ser igual ao Andar do usuário");
-            return;
-        }
-        System.out.println(esforcoA);
-        elevadores.setAndarAtualA(andarDestino);
-    }
+            System.out.println("|*****************|\n|**** 10 ** 9 ****|\n|****  8 ** 7 ****|\n|****  6 ** 5 ****|");
+            System.out.println("|****  4 ** 3 ****|\n|****  2 ** 1 ****|\n|**  0  Terreo  **|\n|*****************|");
+            System.out.print("Informe o andar que Você está: ");
+            andarUsuario = sc.nextInt();
 
-    public static void calcularEsforcoB(){
+            System.out.println("|*****************|\n|**** 10 ** 9 ****|\n|****  8 ** 7 ****|\n|****  6 ** 5 ****|");
+            System.out.println("|****  4 ** 3 ****|\n|****  2 ** 1 ****|\n|**  0  Terreo  **|\n|*****************|");
+            System.out.print("Informe o andar Destino: ");
+            andarDestino = sc.nextInt();
 
-        if (elevadores.getAndarAtualB() <= andarUsuario && andarDestino > andarUsuario){
-            esforcoB = ((andarUsuario - elevadores.getAndarAtualB()) + (andarDestino - andarUsuario)) * 1.25;//ok
+            if (andarDestino == andarUsuario){
+                System.out.println("Andar de Destino não pode ser o mesmo andar do Usuário!");
+                return;
+            }
+            calcEsforcoA();
+            calcEsforcoB();
+            System.out.printf("ESFORÇO ELEVADOR: A %.2f  \nESFORÇO ELEVADOR: B %.2f \n", esforcoA, esforcoB);
             System.out.println();
-        } else if (elevadores.getAndarAtualB() <= andarUsuario && andarDestino < andarUsuario){
-            esforcoB = ((andarUsuario - elevadores.getAndarAtualB()) * 1.25) + (andarUsuario - andarDestino);//ok
-        } else if (elevadores.getAndarAtualB() > andarUsuario && andarDestino > andarUsuario){
-            esforcoB = (elevadores.getAndarAtualB() - andarUsuario) + ((andarDestino - andarUsuario) * 1.25);//ok
-        } else if (elevadores.getAndarAtualB() > andarUsuario && andarDestino < andarUsuario) {
-            esforcoB = ((elevadores.getAndarAtualB() - andarUsuario)) + ((andarUsuario - andarDestino));//ok
-        } else if (andarUsuario == andarDestino){
-            System.out.println("Destino não pode ser igual ao Andar do usuário");
+            seletorAtendimento();
+            System.out.println();
             return;
-        }
-        System.out.println(esforcoB);
-        elevadores.getAndarAtualB();
+        }while (true);
+
     }
 
-    public static void menorEsfoco(){
+    public static void calcEsforcoA(){
+        esforcoA = elevadorA.calcularEsforco(andarUsuario, andarDestino);
+        elevadorA.setAndarAtual(andarDestino);
+    }
+
+    public static void calcEsforcoB(){
+        esforcoB = elevadorB.calcularEsforco(andarUsuario, andarDestino);
+    }
+
+    public static void seletorAtendimento(){
         if (esforcoA <= esforcoB){
-            System.out.println(elevadores.isPrioritario(elevadores.getIdElevador("A")));
-            System.out.printf("Andar da Solicitação: %dº - Andar Destino: %dº - Atendimento Elevador %s: \n", andarUsuario, andarDestino, elevadores.getIdElevador("AE"));
+            System.out.printf("Andar de Solicitação: %dº, Andar de Destino %dº, Elevador: A", andarUsuario, andarDestino);
+            elevadorA.setAndarAtual(andarDestino);
+            elevadorB.setAndarAtual(0);
+            elevadorB.desligarB();
         } else {
-            System.out.println(elevadores.isPrioritario(elevadores.getIdElevador("B")));
-            System.out.printf("B Andar da Solicitação: %d - Andar Destino %d - Atendimento Elevador %s: ", andarUsuario, andarDestino, elevadores.getIdElevador("B"));
-
+            System.out.printf("Andar de Solicitação: %dº, Andar de Destino %dº, Elevador: B", andarUsuario, andarDestino);
+            elevadorB.setAndarAtual(andarDestino);
+            elevadorA.setAndarAtual(0);
+            elevadorA.desligarA();
         }
     }
 
-
-
-    /*public static boolean ativarPrioridade(){
-        boolean prioridade;
-
-
-
-        /*if (elevador.isLigadoA() == true && elevador.isLigadoB() == false){
-            elevador.setIdElevador("A");
-            System.out.printf("Atendimento Elevador: %s\n",elevador.getIdElevador());
+    public static void statusElevadores(){
+        if (elevadorA.isLigadoA() == true ){
+            System.out.printf("Elevador: A Ligado no %dº Andar: \n", elevadorA.getAndarAtual());
         }
 
-        if (elevador.isLigadoB() == true && elevador.isLigadoA() == false){
-            elevador.setIdElevador("B");
-            System.out.printf("Atendimento Elevador: %s\n",elevador.getIdElevador());
-
+        if (elevadorB.isLigadoB() == true){
+            System.out.printf("Elevador: B Ligado no %dº andar: \n", elevadorB.getAndarAtual());
         }
 
-        if (elevador.isLigadoA() == true && elevador.isLigadoB() == true){
-            elevador.setIdElevador("A");
-            System.out.printf("Atendimento Elevador: %s\n",elevador.getIdElevador());
-
+        if (elevadorA.isLigadoA() == false ){
+            System.out.printf("Elevador: A Desligado no %dº Andar: \n", elevadorA.getAndarAtual());
         }
-
-
-
-
-
-    }*/
-
+        if (elevadorB.isLigadoB() == false){
+            System.out.printf("Elevador: B Desligado no %dº Andar: \n", elevadorB.getAndarAtual());
+        }
+    }
 
 }
-
-
-

@@ -2,46 +2,37 @@ package segundoPeriodo.Elevadores;
 
 public class Elevadores {
 
-    private String idElevador;
-    private int andarAtualA;
-    private int andarAtualB;
+    private int idElevador;
+    private int andarAtual;
     private boolean ligadoA;
     private boolean ligadoB;
     private boolean prioritario;
 
-
-
-    public Elevadores(int andarAtualA, int andarAtualB) {
-        this.andarAtualA = andarAtualA;
-        this.andarAtualB = andarAtualB;
+    public Elevadores(int andarAtual,/*int andarAtualA, int andarAtualB,*/ int idElevador, boolean prioritario) {
+        this.andarAtual = andarAtual;
+        this.idElevador = idElevador;
+        this.prioritario = prioritario;
     }
 
-    public String getIdElevador(String a) {
+
+    public int getAndarAtual() {
+        return andarAtual;
+    }
+
+    public void setAndarAtual(int andarAtual) {
+        this.andarAtual = andarAtual;
+    }
+
+    public int getIdElevador() {
         return idElevador;
     }
 
-    public void setIdElevador(String idElevador) {
+    public void setIdElevador(int idElevador) {
         this.idElevador = idElevador;
-    }
-
-    public int getAndarAtualA() {
-        return andarAtualA;
-    }
-
-    public void setAndarAtualA(int andarAtualA) {
-        this.andarAtualA = andarAtualA;
     }
 
     public boolean isLigadoA() {
         return ligadoA;
-    }
-
-    public int getAndarAtualB() {
-        return andarAtualB;
-    }
-
-    public void setAndarAtualB(int andarAtualB) {
-        this.andarAtualB = andarAtualB;
     }
 
     public void setLigadoA(boolean ligadoA) {
@@ -56,7 +47,7 @@ public class Elevadores {
         this.ligadoB = ligadoB;
     }
 
-    public boolean isPrioritario(String a) {
+    public boolean isPrioritario() {
         return prioritario;
     }
 
@@ -104,9 +95,20 @@ public class Elevadores {
         prioritario = true;
     }
 
+    public double calcularEsforco (int andarUsuario, int andarDestino){
+        double esforco = 0;
 
-
-
-
+        if (this.andarAtual <= andarUsuario && andarDestino > andarUsuario){
+            esforco = ((andarUsuario - this.andarAtual) + (andarDestino - andarUsuario)) * 1.25;//ok
+            System.out.println();
+        } else if (this.andarAtual <= andarUsuario && andarDestino < andarUsuario){
+            esforco = ((andarUsuario - this.andarAtual) * 1.25) + (andarUsuario - andarDestino);//ok
+        } else if (this.andarAtual > andarUsuario && andarDestino > andarUsuario){
+            esforco = (this.andarAtual - andarUsuario) + ((andarDestino - andarUsuario) * 1.25);//ok
+        } else if (this.andarAtual > andarUsuario && andarDestino < andarUsuario) {
+            esforco = ((this.andarAtual - andarUsuario)) + ((andarUsuario - andarDestino));//ok
+        }
+        return esforco;
+    }
 
 }
