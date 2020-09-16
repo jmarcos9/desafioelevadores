@@ -4,8 +4,8 @@ import java.util.Scanner;
 public class AppElevador {
 
     static Scanner sc = new Scanner(System.in);
-    static Elevadores elevadorA = new Elevadores(0, 1, false);
-    static Elevadores elevadorB = new Elevadores(0, 2, false);
+    static Elevador elevador1 = new Elevador(1,false,false, 1);
+    static Elevador elevador2 = new Elevador(2,false,false, 1);
     static byte opcao = 0;
     static int andarUsuario;
     static int andarDestino;
@@ -16,23 +16,26 @@ public class AppElevador {
     public static void main(String[] args) throws InterruptedException {
 
         do {
-            System.out.println("\nOpção: \n*** 1 - Ligar/Desligar Elevador: A \n*** 2 - Ligar/Desligar Elevador: B" +
+            System.out.println("\nOpção: \n*** 1 - Ligar/Desligar Elevador: 1 \n*** 2 - Ligar/Desligar Elevador: 2" +
                     "\n*** 3 - Solicitar Elevador \n*** 4 - Status Elevador  ");
             System.out.print("Entre com a opção: ");
             opcao = sc.nextByte();
 
             switch (opcao){
                 case 1:
-                    ligarDesligarElevadorA();
+                    ligarDesligarElevador1();
                     break;
                 case 2:
-                    ligarDesligarElevadorB();
+                    ligarDesligarElevador2();
                     break;
                 case 3:
                     solicitarElevador();
                     break;
                 case 4:
-                    statusElevadores();
+                    statusElevador();
+                    break;
+                case 5:
+                    definirElevadorPrioritario();
                     break;
                 case 0:
                     System.out.println("Programa encerrado");
@@ -42,56 +45,29 @@ public class AppElevador {
         } while (opcao != 0);
     }
 
-    public static boolean ligarDesligarElevadorA(){
-        if (elevadorA.isLigadoA() == false) {
-            System.out.println("Elevador A: Ligado");
-            elevadorA.ligarDesligarA();
-            System.out.printf("Andar atual: %d - Terreo\n",elevadorA.getAndarAtual());
-        } else {
-            elevadorA.ligarDesligarA();
-            elevadorA.setAndarAtual(0);
-            System.out.printf("Andar atual A: %d - Terreo\n",elevadorA.getAndarAtual());
-            System.out.println("Elevador A: Desligado");
-        }return true;
-    }
-
-    public static boolean ligarDesligarElevadorB(){
-        if (elevadorA.isLigadoA() == false){
-            System.out.println("Elevador: (A) Deve ser ligado Primeiro");
-            return true;
-        }
-
-        if (elevadorB.isLigadoB() == false) {
-            System.out.println("Elevador B: Ligado");
-            elevadorB.ligarDesligarB();
-            System.out.printf("Andar atual B: %d - Terreo\n",elevadorB.getAndarAtual());
-        } else {
-            elevadorB.ligarDesligarB();
-            System.out.println("Elevador B: Desligado");
-        }return true;
-    }
-
     public static void solicitarElevador(){
-        elevadorA.getAndarAtual();
-        if (elevadorA.isLigadoA() == false){
-            elevadorA.ligarA();
-        } else if (elevadorA.isLigadoA() == true && elevadorB.isLigadoB() == false){
-            elevadorB.ligarB();
+        elevador1.getAndarAtual();
+        if (elevador1.isLigado() == false){
+            elevador1.ligarDesligar();
+        } else if (elevador1.isLigado() == true && elevador2.isLigado() == false){
+            elevador2.ligarDesligar();
         }
         menu();
     }
 
     public static void menu(){
+
+
         do {
-            statusElevadores();
+            //statusElevador();
             System.out.println();
             System.out.println("|*****************|\n|**** 10 ** 9 ****|\n|****  8 ** 7 ****|\n|****  6 ** 5 ****|");
-            System.out.println("|****  4 ** 3 ****|\n|****  2 ** 1 ****|\n|**  0  Terreo  **|\n|*****************|");
+            System.out.println("|****  4 ** 3 ****|\n|****  2 ** 1 ****|\n|*****************|");
             System.out.print("Informe o andar que Você está: ");
             andarUsuario = sc.nextInt();
 
             System.out.println("|*****************|\n|**** 10 ** 9 ****|\n|****  8 ** 7 ****|\n|****  6 ** 5 ****|");
-            System.out.println("|****  4 ** 3 ****|\n|****  2 ** 1 ****|\n|**  0  Terreo  **|\n|*****************|");
+            System.out.println("|****  4 ** 3 ****|\n|****  2 ** 1 ****|\n|*****************|");
             System.out.print("Informe o andar Destino: ");
             andarDestino = sc.nextInt();
 
@@ -99,55 +75,93 @@ public class AppElevador {
                 System.out.println("Andar de Destino não pode ser o mesmo andar do Usuário!");
                 return;
             }
-            calcEsforcoA();
-            calcEsforcoB();
-            System.out.printf("ESFORÇO ELEVADOR: A %.2f  \nESFORÇO ELEVADOR: B %.2f \n", esforcoA, esforcoB);
+            calcEsforco1();
+            calcEsforco2();
+            System.out.printf("ESFORÇO ELEVADOR: 1 %.2f  \nESFORÇO ELEVADOR: 2 %.2f \n", esforcoA, esforcoB);
             System.out.println();
+
             seletorAtendimento();
+
             System.out.println();
             return;
         }while (true);
 
     }
 
-    public static void calcEsforcoA(){
-        esforcoA = elevadorA.calcularEsforco(andarUsuario, andarDestino);
-        elevadorA.setAndarAtual(andarDestino);
+    public static boolean ligarDesligarElevador1(){
+
+        if (elevador1.isLigado() == false) {
+            System.out.printf("Elevador 1: Ligado - Andar atual: %dº \n",elevador1.getAndarAtual());
+            elevador1.ligarDesligar();
+        } else {
+            elevador1.ligarDesligar();
+            elevador1.setAndarAtual(1);
+            System.out.printf("Elevador 1: Desligado - Andar atual: %dº \n",elevador1.getAndarAtual());
+        }return true;
+
     }
 
-    public static void calcEsforcoB(){
-        esforcoB = elevadorB.calcularEsforco(andarUsuario, andarDestino);
+    public static boolean ligarDesligarElevador2(){
+
+        if (elevador2.isLigado() == false) {
+            elevador2.ligarDesligar();
+            System.out.printf("Elevador 2: Ligado - Andar atual: %dº \n",elevador2.getAndarAtual());
+        } else {
+            elevador2.ligarDesligar();
+            elevador2.setAndarAtual(1);
+            System.out.printf("Elevador 2: Desligado - Andar atual: %dº \n",elevador2.getAndarAtual());
+        }return true;
+    }
+
+    public static void calcEsforco1(){
+        esforcoA = elevador1.calcularEsforco(andarUsuario, andarDestino);
+        //elevador1.setAndarAtual(andarDestino);
+    }
+
+    public static void calcEsforco2(){
+        esforcoB = elevador2.calcularEsforco(andarUsuario, andarDestino);
     }
 
     public static void seletorAtendimento(){
         if (esforcoA <= esforcoB){
-            System.out.printf("Andar de Solicitação: %dº, Andar de Destino %dº, Elevador: A", andarUsuario, andarDestino);
-            elevadorA.setAndarAtual(andarDestino);
-            elevadorB.setAndarAtual(0);
-            elevadorB.desligarB();
+            elevador1.setAndarAtual(andarDestino);
+            //elevador2.setAndarAtual(1);
+            elevador2.ligarDesligar();
+            System.out.printf("Andar de Solicitação: %dº, Andar de Destino %dº, Elevador: 1", andarUsuario, andarDestino);
         } else {
-            System.out.printf("Andar de Solicitação: %dº, Andar de Destino %dº, Elevador: B", andarUsuario, andarDestino);
-            elevadorB.setAndarAtual(andarDestino);
-            elevadorA.setAndarAtual(0);
-            elevadorA.desligarA();
+            System.out.printf("Andar de Solicitação: %dº, Andar de Destino %dº, Elevador: 2\n", andarUsuario, andarDestino);
+            elevador2.setAndarAtual(andarDestino);
+            ligarDesligarElevador1();
         }
     }
 
-    public static void statusElevadores(){
-        if (elevadorA.isLigadoA() == true ){
-            System.out.printf("Elevador: A Ligado no %dº Andar: \n", elevadorA.getAndarAtual());
+    public static void definirElevadorPrioritario() {
+        if (elevador1.isLigado() == false || elevador2.isLigado() == false) {
+            System.out.println("Para ativar a prioridade os dois Elevadores devem estar Ligados");
+            return;
         }
 
-        if (elevadorB.isLigadoB() == true){
-            System.out.printf("Elevador: B Ligado no %dº andar: \n", elevadorB.getAndarAtual());
-        }
-
-        if (elevadorA.isLigadoA() == false ){
-            System.out.printf("Elevador: A Desligado no %dº Andar: \n", elevadorA.getAndarAtual());
-        }
-        if (elevadorB.isLigadoB() == false){
-            System.out.printf("Elevador: B Desligado no %dº Andar: \n", elevadorB.getAndarAtual());
+        System.out.println("Ativar Prioridade: ");
+        System.out.println("Digite 1 para Ativar Prioridade Elevador: 1");
+        System.out.println("Digite 2 para Ativar Prioridade Elevador: 2");
+        int opcao = sc.nextInt();
+        if (opcao == 1) {
+            elevador1.ativarPrioridade();
+            System.out.println("Elevador 1 - Prioritário");
+            System.out.println();
+            ligarDesligarElevador2();
         }
     }
+
+    public static void statusElevador(){
+        if (elevador1.isLigado()){
+            System.out.printf("Elevador: 1 Ligado no %dº Andar: \n", elevador1.getAndarAtual());
+        }
+
+        if (elevador2.isLigado()){
+            System.out.printf("Elevador: 2 Ligado no %dº andar: \n", elevador2.getAndarAtual());
+        }
+    }
+
 
 }

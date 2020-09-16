@@ -1,19 +1,18 @@
 package segundoPeriodo.Elevadores;
 
-public class Elevadores {
+public class Elevador {
 
     private int idElevador;
-    private int andarAtual;
-    private boolean ligadoA;
-    private boolean ligadoB;
+    private boolean ligado;
     private boolean prioritario;
+    private int andarAtual;
 
-    public Elevadores(int andarAtual,/*int andarAtualA, int andarAtualB,*/ int idElevador, boolean prioritario) {
-        this.andarAtual = andarAtual;
+    public Elevador(int idElevador, boolean ligado, boolean prioritario, int andarAtual) {
         this.idElevador = idElevador;
-        this.prioritario = prioritario;
+        this.ligado = false;
+        this.prioritario = false;
+        this.andarAtual = 1;
     }
-
 
     public int getAndarAtual() {
         return andarAtual;
@@ -31,68 +30,28 @@ public class Elevadores {
         this.idElevador = idElevador;
     }
 
-    public boolean isLigadoA() {
-        return ligadoA;
+    public boolean isLigado() {
+        return ligado;
     }
 
-    public void setLigadoA(boolean ligadoA) {
-        this.ligadoA = ligadoA;
+    public void ligarDesligar(){
+        ligado = true;
     }
 
-    public boolean isLigadoB() {
-        return ligadoB;
-    }
+    /*public void onOff() {
+        if (isLigado()) {
+            ligarDesligar();
+        } else {
+            ligarDesligar();
+        }
+    }*/
 
-    public void setLigadoB(boolean ligadoB) {
-        this.ligadoB = ligadoB;
-    }
-
-    public boolean isPrioritario() {
+    public boolean ativarPrioridade(){
         return prioritario;
     }
 
-    public void setPrioritario(boolean prioritario) {
-        this.prioritario = prioritario;
-    }
-
-    void ligarA(){
-        ligadoA = true;
-    }
-
-    void desligarA(){
-        ligadoA = false;
-    }
-
-    void ligarB(){
-        ligadoB = true;
-    }
-
-    void desligarB(){
-        ligadoB = false;
-    }
-
-    public void ligarDesligarA() {
-        if (isLigadoA()) {
-            desligarA();
-            //ligar();
-        } else {
-            //desligar();
-            ligarA();
-        }
-    }
-
-    public void ligarDesligarB() {
-        if (isLigadoB()) {
-            desligarB();
-            //ligar();
-        } else {
-            //desligar();
-            ligarB();
-        }
-    }
-
-    void prioritaridade(){
-        prioritario = true;
+    public boolean desativarPrioridade(){
+        return prioritario;
     }
 
     public double calcularEsforco (int andarUsuario, int andarDestino){
