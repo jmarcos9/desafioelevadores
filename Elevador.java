@@ -34,24 +34,28 @@ public class Elevador {
         return ligado;
     }
 
+    public void setLigado(boolean ligado) {
+        this.ligado = ligado;
+    }
+
+    public boolean isPrioritario() {
+        return prioritario;
+    }
+
+    public void setPrioritario(boolean prioritario) {
+        this.prioritario = prioritario;
+    }
+
     public void ligarDesligar(){
-        ligado = true;
+        ligado = (true);
     }
 
-    /*public void onOff() {
-        if (isLigado()) {
-            ligarDesligar();
-        } else {
-            ligarDesligar();
-        }
-    }*/
-
-    public boolean ativarPrioridade(){
-        return prioritario;
+    public void ativarPrioridade(){
+        prioritario = true;
     }
 
-    public boolean desativarPrioridade(){
-        return prioritario;
+    public void desativarPrioridade(){
+        prioritario = false;
     }
 
     public double calcularEsforco (int andarUsuario, int andarDestino){
@@ -69,5 +73,4 @@ public class Elevador {
         }
         return esforco;
     }
-
 }
