@@ -1,8 +1,8 @@
-package segundoPeriodo.Elevadores;
+package segundoPeriodo.Elevador;
+
 import java.util.Scanner;
 
-public class AppElevador {
-
+public class AppElevadorNew{
     static Scanner sc = new Scanner(System.in);
     static Elevador elevador1 = new Elevador(1,false,false, 1);
     static Elevador elevador2 = new Elevador(2,false,false, 1);
@@ -114,6 +114,8 @@ public class AppElevador {
                 return;
             }
             elevador1.setLigado(false);
+            elevador1.setPrioritario(false);
+            elevador1.setAndarAtual(1);
             System.out.println("Elevador (1) - Desligado");
         }
     }
@@ -149,6 +151,7 @@ public class AppElevador {
                 return;
             }
             elevador2.setLigado(false);
+            elevador2.setPrioritario(false);
             System.out.println("Elevador (2) - Desligado");
         }
     }
@@ -171,24 +174,29 @@ public class AppElevador {
         } while (true);
 
         if (opcao == 1){
-            if (elevador2.isPrioritario() == true){
-                System.out.println("Elevador: (2) Já está ativado como prioritário!");
+
+            if (elevador1.isLigado() == false){
+                System.out.println("Elevador (1) está desligado. Ligue-o primeiro antes de ativar como prioritário.");
                 return;
             }
+
             if (elevador1.isPrioritario() == true){
-                System.out.println("Elevador está ativado como prioritário!");
+                System.out.println("Elevador já está ativado como prioritário!");
                 return;
             }
             elevador1.setPrioritario(true);
             elevador2.setLigado(false);
+            elevador2.setPrioritario(false);
             System.out.println("Prioridade ativada para Elevador: (1)");
         } else if (opcao == 2){
-            if (elevador1.isPrioritario() == true){
-                System.out.println("Elevador: (1) está ativado como prioritário!");
+
+            if (elevador2.isLigado() == false){
+                System.out.println("Elevador (2) está desligado. Ligue-o primeiro antes de ativar como prioritário.");
                 return;
             }
+
             if (elevador2.isPrioritario() == true){
-                System.out.println("Elevador está ativado como prioritário!");
+                System.out.println("Elevador já está ativado como prioritário!");
                 return;
             }
             elevador2.setPrioritario(true);
@@ -222,6 +230,28 @@ public class AppElevador {
     }
 
     public static void seletorAtendimento(){
+        if (elevador1.isPrioritario() == true && esforcoA == esforcoB){
+            elevador1.setAndarAtual(andarDestino);
+            elevador1.setLigado(true);
+            elevador1.setPrioritario(true);
+            elevador2.setLigado(false);
+            elevador2.setPrioritario(false);
+            elevador2.setAndarAtual(1);
+            System.out.printf("Andar de Solicitação: %dº, Andar de Destino %dº, Elevador: (1)", andarUsuario, andarDestino);
+            return;
+        }
+
+        if (elevador2.isPrioritario() == true && esforcoB == esforcoA){
+            elevador2.setLigado(true);
+            elevador2.setAndarAtual(andarDestino);
+            elevador2.setPrioritario(true);
+            elevador1.setLigado(false);
+            elevador1.setPrioritario(false);
+            elevador1.setAndarAtual(1);
+            System.out.printf("Andar de Solicitação: %dº, Andar de Destino %dº, Elevador: (2)\n", andarUsuario, andarDestino);
+            return;
+        }
+
         if (esforcoA <= esforcoB){
             elevador1.setAndarAtual(andarDestino);
             elevador1.setLigado(true);
@@ -239,6 +269,7 @@ public class AppElevador {
             elevador1.setAndarAtual(1);
             System.out.printf("Andar de Solicitação: %dº, Andar de Destino %dº, Elevador: (2)\n", andarUsuario, andarDestino);
         }
+
     }
 
     public static void statusElevador(){

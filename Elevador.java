@@ -1,4 +1,4 @@
-package segundoPeriodo.Elevadores;
+package segundoPeriodo.Elevador;
 
 public class Elevador {
 
